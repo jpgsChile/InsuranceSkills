@@ -1,0 +1,45 @@
+{
+  "id": "student-001",
+  "nombre": "María González Pérez",
+  "email": "maria.gonzalez@example.com",
+  "rut": "12.345.678-9",
+  "cursos": [
+    {
+      "id": "curso-001",
+      "nombre": "Seguros Generales",
+      "descripcion": "Fundamentos y prácticas de seguros generales en Chile",
+      "duracion": "40 horas",
+      "horas": 40,
+      "nivel": "Básico",
+      "categoria": "Seguros Generales",
+      "completado": true,
+      "fechaCompletacion": "2024-03-15",
+      "credencialId": "cred-001"
+    },
+    {
+      "id": "curso-002",
+      "nombre": "Regulación de Seguros",
+      "descripcion": "Marco regulatorio y normativa del sector asegurador chileno",
+      "duracion": "30 horas",
+      "horas": 30,
+      "nivel": "Intermedio",
+      "categoria": "Regulación",
+      "completado": true,
+      "fechaCompletacion": "2024-04-20",
+      "credencialId": "cred-002"
+    },
+    {
+      "id": "curso-003",
+      "nombre": "Análisis de Riesgos",
+      "descripcion": "Técnicas avanzadas de evaluación y gestión de riesgos",
+      "duracion": "50 horas",
+      "horas": 50,
+      "nivel": "Avanzado",
+      "categoria": "Gestión de Riesgos",
+      "completado": false,
+      "fechaCompletacion": null,
+      "credencialId": null
+    }
+  ]
+}
+
