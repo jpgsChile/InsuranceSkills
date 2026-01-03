@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { UserProvider } from '@/lib/userContext'
 
 export const metadata: Metadata = {
   title: 'Escuela de Seguros de Chile - Credenciales Verificables',
@@ -13,7 +14,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className="min-h-screen bg-gray-50">{children}</body>
+      <body className="min-h-screen bg-gray-50">
+        <UserProvider>
+          {children}
+        </UserProvider>
+      </body>
     </html>
   )
 }

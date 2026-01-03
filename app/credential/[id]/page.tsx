@@ -153,13 +153,30 @@ export default function CredentialDetailPage() {
             </div>
 
             {/* Actions */}
-            <div className="mt-8 pt-6 border-t border-gray-200">
+            <div className="mt-8 pt-6 border-t border-gray-200 space-y-3">
               <Link
                 href={`/verify/${encodeId(credencial.id)}`}
                 className="block w-full text-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
               >
                 Compartir credencial
               </Link>
+              <button
+                onClick={() => {
+                  const jsonStr = JSON.stringify(credencial, null, 2)
+                  const blob = new Blob([jsonStr], { type: 'application/json' })
+                  const url = URL.createObjectURL(blob)
+                  const a = document.createElement('a')
+                  a.href = url
+                  a.download = `credencial-${credencial.credentialSubject.course.name.replace(/\s+/g, '-')}-${credencial.issuanceDate}.json`
+                  document.body.appendChild(a)
+                  a.click()
+                  document.body.removeChild(a)
+                  URL.revokeObjectURL(url)
+                }}
+                className="w-full px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+              >
+                📄 Descargar JSON
+              </button>
             </div>
           </div>
         </div>

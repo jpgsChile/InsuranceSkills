@@ -1,26 +1,48 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Navbar from '@/components/Navbar'
 import CourseCard from '@/components/CourseCard'
-import { getMockUser, getMockCourses } from '@/lib/mockData'
+import IssuanceModal from '@/components/IssuanceModal'
+import { useUser } from '@/lib/userContext'
+import { getMockUser, getMockCourses, getCourseById } from '@/lib/mockData'
 
 export default function DashboardPage() {
+  const { role } = useUser()
   const router = useRouter()
+
+  useEffect(() => {
+    if (role !== 'alumno') {
+      if (role === 'institucion') {
+        router.push('/institucion/dashboard')
+      } else {
+        router.push('/login')
+      }
+    }
+  }, [role, router])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedCourse, setSelectedCourse] = useState<string | null>(null)
   const user = getMockUser()
   const courses = getMockCourses()
 
   // Mock function to simulate issuing a credential
   // In a real implementation, this would call a backend API
   const handleIssueCredential = (courseId: string) => {
-    // For demo purposes, we redirect to wallet
-    // In a real system, this would create the credential first
-    router.push('/wallet')
+    const course = getCourseById(courseId)
+    if (course) {
+      setSelectedCourse(course.name)
+      setIsModalOpen(true)
+    }
   }
 
   const completedCourses = courses.filter(c => c.completed)
   const pendingCourses = courses.filter(c => !c.completed)
+
+  if (role !== 'alumno') {
+    return null
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -98,6 +120,18 @@ export default function DashboardPage() {
           </div>
         )}
       </main>
+
+      {/* Modal de emisión */}
+      {selectedCourse && (
+        <IssuanceModal
+          isOpen={isModalOpen}
+          courseName={selectedCourse}
+          onClose={() => {
+            setIsModalOpen(false)
+            setSelectedCourse(null)
+          }}
+        />
+      )}
     </div>
   )
 }

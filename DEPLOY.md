@@ -73,3 +73,4 @@ Para agregar un dominio personalizado:
 2. Settings → Domains
 3. Agrega tu dominio
 
+

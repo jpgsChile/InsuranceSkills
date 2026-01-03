@@ -1,19 +1,23 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useUser } from '@/lib/userContext'
+import RoleBadge from '@/components/RoleBadge'
 
 export default function LoginPage() {
-  const router = useRouter()
+  const { setRole } = useUser()
   const [email, setEmail] = useState('')
   const [rut, setRut] = useState('')
+  const [selectedRole, setSelectedRole] = useState<'alumno' | 'institucion' | null>(null)
 
   // Mock login - no validation, no authentication
-  // This is a demo system that always redirects to dashboard
+  // This is a demo system that sets the role and redirects
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    router.push('/dashboard')
+    if (selectedRole) {
+      setRole(selectedRole)
+    }
   }
 
   return (
@@ -35,9 +39,52 @@ export default function LoginPage() {
 
       <main className="max-w-md mx-auto px-4 py-16">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">
             Iniciar Sesión
           </h2>
+          <p className="text-sm text-gray-600 mb-6 text-center">
+            Selecciona tu tipo de cuenta
+          </p>
+
+          {/* Selector de Rol */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Tipo de cuenta
+            </label>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setSelectedRole('alumno')}
+                className={`p-4 border-2 rounded-lg transition-all ${
+                  selectedRole === 'alumno'
+                    ? 'border-primary-500 bg-primary-50'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <div className="text-2xl mb-2">👤</div>
+                <div className="font-medium text-gray-900">Alumno</div>
+                <div className="text-xs text-gray-500 mt-1">Ver cursos y credenciales</div>
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedRole('institucion')}
+                className={`p-4 border-2 rounded-lg transition-all ${
+                  selectedRole === 'institucion'
+                    ? 'border-primary-500 bg-primary-50'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <div className="text-2xl mb-2">🏛️</div>
+                <div className="font-medium text-gray-900">Institución</div>
+                <div className="text-xs text-gray-500 mt-1">Emitir credenciales</div>
+              </button>
+            </div>
+            {selectedRole && (
+              <div className="mt-3 flex items-center justify-center">
+                <RoleBadge role={selectedRole} />
+              </div>
+            )}
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
@@ -71,9 +118,14 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className="w-full py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
+              disabled={!selectedRole}
+              className={`w-full py-3 rounded-lg transition-colors font-medium ${
+                selectedRole
+                  ? 'bg-primary-600 text-white hover:bg-primary-700'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
             >
-              Ingresar
+              {selectedRole ? `Ingresar como ${selectedRole === 'alumno' ? 'Alumno' : 'Institución'}` : 'Selecciona un tipo de cuenta'}
             </button>
           </form>
 

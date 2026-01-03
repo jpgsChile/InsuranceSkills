@@ -1,11 +1,32 @@
+'use client'
+
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Navbar from '@/components/Navbar'
 import CredentialCard from '@/components/CredentialCard'
+import { useUser } from '@/lib/userContext'
 import { getMockUser, getMockCredentials } from '@/lib/mockData'
 
 export default function WalletPage() {
+  const { role } = useUser()
+  const router = useRouter()
   const user = getMockUser()
   const credentials = getMockCredentials()
+
+  useEffect(() => {
+    if (role !== 'alumno') {
+      if (role === 'institucion') {
+        router.push('/institucion/dashboard')
+      } else {
+        router.push('/login')
+      }
+    }
+  }, [role, router])
+
+  if (role !== 'alumno') {
+    return null
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
